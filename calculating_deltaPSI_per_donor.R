@@ -5,13 +5,13 @@ library(ggplot2)
 library(reshape2)
 library(ggpubr)
 
-setwd("/Volumes/data3/anna/splicing_analysis_2024/promoterBindingRatios/")
+setwd("/path/promoterBindingRatios/")
 
 
 ### RNA expression by donor
-rna_nt <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/notx/chrall_NT_splicing_phenotype.ratio.expression.txt", as.is = T, stringsAsFactors = F, row.names = 1)
+rna_nt <- read.delim("/path/notx/chrall_NT_splicing_phenotype.ratio.expression.txt", as.is = T, stringsAsFactors = F, row.names = 1)
 names(rna_nt) <- lapply(strsplit(names(rna_nt), "_"), "[[", 1)
-rna_il1b <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/il1b/chrall_IL1B_splicing_phenotype.ratio.expression.txt", as.is = T, stringsAsFactors = F, row.names = 1)
+rna_il1b <- read.delim("/path/il1b/chrall_IL1B_splicing_phenotype.ratio.expression.txt", as.is = T, stringsAsFactors = F, row.names = 1)
 names(rna_il1b) <- lapply(strsplit(names(rna_il1b), "_"), "[[", 1)
 # put in the same order
 rna_nt <- rna_nt[order(names(rna_nt), decreasing = F)]
@@ -34,14 +34,14 @@ dpsi_df <- data.frame(t(data.frame(dpsi)))
 dpsi_df$intron <- as.character(gsub("\\.", ":", gsub("X", "chr", unlist(row.names(dpsi_df))))) ## put in the same format as the leafcutter outputs so things can be matched up
 
 # save
-write.table(dpsi_df, file = "/Volumes/data3/anna/splicing_analysis_2024/promoterBindingRatios/leafcutter_53HAECsIL1Bornotx_deltapsi_byDonor.txt", sep = "\t", quote = F)
+write.table(dpsi_df, file = "/path/promoterBindingRatios/leafcutter_53HAECsIL1Bornotx_deltapsi_byDonor.txt", sep = "\t", quote = F)
 
-#dpsi_df <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/promoterBindingRatios/leafcutter_53HAECsIL1Bornotx_deltapsi_byDonor.txt", as.is = T, stringsAsFactors = F)
+#dpsi_df <- read.delim("/path/promoterBindingRatios/leafcutter_53HAECsIL1Bornotx_deltapsi_byDonor.txt", as.is = T, stringsAsFactors = F)
 
 
 
 ## match up with the leafcutter res
-leaf <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
+leaf <- read.delim("/path/leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
 leaf %>% filter(p.adjust < 0.05, abs(deltapsi) > 0.05) -> leaf.sig
 leaf.sig %>% filter(spliceType == "AF") %>% group_by(genes) %>% filter(n() == 2) -> leaf.af
 
@@ -60,7 +60,7 @@ ggplot(to.plot.dpsi, aes(name, reorder(intron, value), fill = value)) + geom_til
 
 #### boxplots for deltapsi for genes in the oxidative stress pathway
 # read in gene ontology results:
-gse_res <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/leafcutter_DSGs_fgsea_geneSetEnrichment_results.txt", as.is = T, stringsAsFactors = F)
+gse_res <- read.delim("/path/leafcutter_DSGs_fgsea_geneSetEnrichment_results.txt", as.is = T, stringsAsFactors = F)
 oxstressgenes <- c("NCOA7", "RCAN1", "GPX4", "ABL1", "SESN1", "KDM6B")
 
 # add gene symbols to dpsi_df
@@ -83,22 +83,9 @@ leaf %>% filter(genes %in% oxstressgenes & deltapsi > 0.05 & p.adjust < 0.05) %>
 ggplot(oxstress_toplot, aes(category, value, fill = category)) + geom_boxplot() + theme_classic() + scale_fill_manual(values = c("steelblue", "darkred"), name = "Alternate First Exon") + facet_grid(cols = vars(geneSymbol), scales = "free") + ylab("deltaPSI") + xlab("") + ggtitle("Oxidative Stress DSGs") + 
   stat_pvalue_manual(oxstress_pvals, label = "p.adjust", size = 3) + ylim(-1,1)
 
-### for genes in the response to toxic substance pathway
-toxicgenes <- as.character(vapply(strsplit(gse_res$core_enrichment[1], split = "/"), function(x) paste(x), character(9L))  )
-
-dpsi_df %>% 
-  filter(geneSymbol %in% toxicgenes & abs(deltapsi) > 0.05 & p.adjust < 0.05) %>%
-  mutate(category = ifelse(deltapsi > 0, "Inducible", "Basal"))-> dpsi_toxic
-
-toxic_toplot <- melt(dpsi_toxic, id.vars = c("geneSymbol", "deltapsi", "p.adjust", "intron", "category"))
-head(toxic_toplot)
-
 
 leaf %>% filter(genes %in% toxicgenes & deltapsi > 0.05 & p.adjust < 0.05) %>% dplyr::select(genes, p.adjust) %>% mutate(group1 = "Basal", group2 = "Inducible", y.position = 0.95, geneSymbol = genes, category = "Inducible") -> toxic_pvals
 
-
-ggplot(toxic_toplot, aes(category, value, fill = category)) + geom_boxplot() + theme_classic() + scale_fill_manual(values = c("steelblue", "darkred"), name = "Alternate First Exon") + facet_grid(cols = vars(geneSymbol), scales = "free") + ylab("deltaPSI") + xlab("") + ggtitle("Response to toxic substance DSGs") + 
-  stat_pvalue_manual(toxic_pvals, label = "p.adjust", size = 3) + ylim(-1,1)
 
 ### for genes in the response to orgacidbiosynth substance pathway
 gse_res <- read.delim("leafcutter_DSGs_fgsea_geneSetEnrichment_results.txt", as.is = T, stringsAsFactors = F)
@@ -193,7 +180,7 @@ top_melt$label <- paste0(top_melt$toppath, ", ", "\nNES=", top_melt$path_nes, ",
 
 #top_melt$toppath <- factor(top_melt$toppath, levels = c("Response to oxidative stress","Positive regulation of transcription by RNA polymerase II","Cellular response to chemical stimulus","Positive regulation of programmed cell death","Organic acid metabolic process","RNA splicing","Organophosphate metabolic process", "Cytokine production","Lipid biosynthetic process","Cellular response to organonitrogen compound"))
 
-pdf("/Volumes/data3/anna/splicing_ms_2025/figures/DSGs_in_GO_terms_heatmap_byDPSI.pdf")
+pdf("/path/figures/DSGs_in_GO_terms_heatmap_byDPSI.pdf")
 ggplot(na.omit(top_melt), aes(variable, reorder(gene, abs(deltaPSI)), fill = deltaPSI)) + geom_tile() + facet_grid(cols = vars(direction), rows = vars(reorder(label, -1*path_nes)), scales = "free", space = "free", switch = "y", labeller = label_wrap_gen(width = 40)) + scale_fill_gradient(low = "yellow", high = "blue") + theme_classic() + theme(axis.text.y = element_text(size = 7), axis.text.x = element_blank(), strip.text.y.left = element_text(angle = 360), axis.ticks.x = element_blank(), axis.title = element_text(size= 7)) + xlab("n = 53             n = 53") + ylab("") + ggtitle("Pathway enrichment in DSGs") + scale_y_discrete(position = "right")
 dev.off()
 
