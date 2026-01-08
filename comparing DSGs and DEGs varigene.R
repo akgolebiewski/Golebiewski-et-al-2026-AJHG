@@ -1,9 +1,9 @@
 ###### comparing DEG and DSGs with Il1B or notx
 
-setwd("/Volumes/data3/anna/splicing_analysis_2024/")
+setwd("/path/")
 
-DSGs <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
-DEGs <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/24_04_17_variGeneFinal_edgeR_differentialExpression-Treatment_condenseGenes.txt",
+DSGs <- read.delim("/path/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
+DEGs <- read.delim("/path/24_04_17_variGeneFinal_edgeR_differentialExpression-Treatment_condenseGenes.txt",
                    as.is = T, stringsAsFactors = T, row.names = 1) #run with condenseGenes!
 
 # positive logFC = UP in Il1B
@@ -99,7 +99,7 @@ DEGs$SE <- ifelse(DEGs$spliceType == "SE", "SE", NA)
 table(DEGs$SE)
 DEGs$SE <- factor(DEGs$SE, levels = c(NA,"SE"), ordered = T)
 
-pdf("/Volumes/data3/anna/splicing_ms_2025/figures/AF_SE_DSGs_in_DEGs_volcanoplots.pdf", height = 4, width = 5)
+pdf("/path/figures/AF_SE_DSGs_in_DEGs_volcanoplots.pdf", height = 4, width = 5)
 ggplot(DEGs) +
   geom_point(aes(x = logFC, y = -log10(FDR)), color = "black", size = 0.5) +
   geom_point(data = DEGs[DEGs$AF == "AF",], aes(x = logFC, y = -log10(FDR), color = "orchid"), size = 1)+
@@ -146,6 +146,6 @@ names(fisher_df) <- c("p.value", "spliceType")
 
 fisher_df$spliceType <- factor(fisher_df$spliceType, levels = c("AF", "A3", "A5", "SE", "MX", "RI", "AL", "cryptic"))
 
-pdf("/Volumes/data3/anna/splicing_ms_2025/figures/spliceType_enrich_in_DEGs_dotplot.pdf", height = 5, width = 5)
+pdf("/path/figures/spliceType_enrich_in_DEGs_dotplot.pdf", height = 5, width = 5)
 ggplot(fisher_df[!fisher_df$spliceType == "cryptic",], aes(-log10(p.value), fct_rev(spliceType), fill = p.value < 0.05)) + geom_dotplot(dotsize = 3.5) + theme_bw() + theme(axis.line = element_line(color = "black"), axis.text.y = element_text(vjust = -0.3, size = 12), axis.text.x = element_text(size = 12)) + scale_fill_manual(values = c("gray", "red"), name = "Fisher's Exact", labels = c("p.value > 0.05", "p.value < 0.05")) + ylab("") + ggtitle("Splice Type Enrichment in DEGs") + xlab("-log10(p.value)")
 dev.off()
