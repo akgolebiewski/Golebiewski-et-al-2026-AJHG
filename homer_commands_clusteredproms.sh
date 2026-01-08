@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /data3/anna/splicing_ms_2025/final_data/homer/erg_rela_clusteredproms/
+cd /path/erg_rela_clusteredproms/
 
 ######### find motifs in clusters 1 and 2 at Pbasal set
 findMotifsGenome.pl clusters_1and2_ergrelarep_pbasal.txt hg38 clusters_1and2_ergrelarep_pbasal_pindbackground -size given -mask -bg clusters_1and2_ergrelarep_pinducible.txt
