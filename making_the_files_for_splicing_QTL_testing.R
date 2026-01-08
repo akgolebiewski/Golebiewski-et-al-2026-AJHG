@@ -1,4 +1,4 @@
-tog<-read.delim("X:/leafcutter/hg38_bamfiles/final_set/Final_set_hg38_perind.counts.gz",
+tog<-read.delim("/path/Final_set_hg38_perind.counts.gz",
                 sep = " ", header = T, as.is = T, stringsAsFactors = F)
 chromosomes<-unlist(lapply(strsplit(tog$chrom, split = ":"), "[[",1))
 table(chromosomes)
@@ -16,9 +16,9 @@ il1b<-cbind(tog_filt$chrom, il1b)
 names(nt)[1]<-"chrom"
 names(il1b)[1]<-"chrom"
 
-write.table(nt, "X:/leafcutter/hg38_splicing_QTLs/notx/NT_perind.counts",
+write.table(nt, "/path/notx/NT_perind.counts",
             sep = " ", col.names = T, row.names = F, quote = F)
-write.table(il1b, "X:/leafcutter/hg38_splicing_QTLs/il1b/IL1B_perind.counts",
+write.table(il1b, "/path/il1b/IL1B_perind.counts",
             sep = " ", col.names = T, row.names = F, quote = F)
 
 ####Putting_the_chromosomes_together_for_matrixeQTL
@@ -40,7 +40,7 @@ names(anno_nt)<-c("ID","chr","start","end")
 tog_nt<-as.data.frame(matrix(nrow = 0, ncol = 53))
 names(tog_nt)<-names(nt)[2:54]
 for(the.file in nt_list){
-  to.add<-read.delim(paste("X:/leafcutter/hg38_splicing_QTLs/notx/",the.file, sep = ""), 
+  to.add<-read.delim(paste("/path/notx/",the.file, sep = ""), 
                      sep = "\t", header = T, as.is = T, stringsAsFactors = F)
   
   anno.to.add<-to.add[,c(4,1,2,3)]
@@ -73,7 +73,7 @@ names(anno_il1b)<-c("ID","chr","start","end")
 tog_il1b<-as.data.frame(matrix(nrow = 0, ncol = 53))
 names(tog_il1b)<-names(il1b)[2:54]
 for(the.file in il1b_list){
-  to.add<-read.delim(paste("X:/leafcutter/hg38_splicing_QTLs/il1b/",the.file, sep = ""), 
+  to.add<-read.delim(paste("/path/il1b/",the.file, sep = ""), 
                      sep = "\t", header = T, as.is = T, stringsAsFactors = F)
   
   anno.to.add<-to.add[,c(4,1,2,3)]
@@ -88,21 +88,21 @@ for(the.file in il1b_list){
   print(the.file)
 }
 
-write.table(tog_nt,"X:/leafcutter/hg38_splicing_QTLs/notx/chrall_NT_splicing_phenotype.ratio.expression.txt", 
+write.table(tog_nt,"/path/notx/chrall_NT_splicing_phenotype.ratio.expression.txt", 
             sep = "\t", col.names = NA, row.names = T, quote = F)
-write.table(tog_il1b,"X:/leafcutter/hg38_splicing_QTLs/il1b/chrall_IL1B_splicing_phenotype.ratio.expression.txt", 
+write.table(tog_il1b,"/path/il1b/chrall_IL1B_splicing_phenotype.ratio.expression.txt", 
             sep = "\t", col.names = NA, row.names = T, quote = F)
-write.table(anno_nt,"X:/leafcutter/hg38_splicing_QTLs/notx/ANNOTATION_NT_splicing_phenotype.ratio.expression.txt", 
+write.table(anno_nt,"/path/notx/ANNOTATION_NT_splicing_phenotype.ratio.expression.txt", 
             sep = "\t", col.names = T, row.names = F, quote = F)
-write.table(anno_il1b,"X:/leafcutter/hg38_splicing_QTLs/il1b/ANNOTATION_IL1B_splicing_phenotype.ratio.expression.txt", 
+write.table(anno_il1b,"/path/il1b/ANNOTATION_IL1B_splicing_phenotype.ratio.expression.txt", 
             sep = "\t", col.names = T, row.names = F, quote = F)
 
 
 
 ####Genotype files####
-geno<-read.delim("W:/vari-gene-final/hg19/QTL_Testing_files/rna/matrixeqtl/notx/GTEx_gene_filter/Genotype_file_correct_donors_ordered_notx_filtered.txt.gz",
+geno<-read.delim("/path/notx/GTEx_gene_filter/Genotype_file_correct_donors_ordered_notx_filtered.txt.gz",
                  sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-geno_anno<-read.delim("W:/vari-gene-final/hg19/QTL_Testing_files/rna/matrixeqtl/notx/GTEx_gene_filter/Anno_file.txt.gz",
+geno_anno<-read.delim("/path/notx/GTEx_gene_filter/Anno_file.txt.gz",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 nt_donor_names<-unlist(lapply(strsplit(names(tog_nt), split = "_"),"[[",1))
@@ -120,23 +120,24 @@ geno_bedfile$Chrom<-geno_anno$chr
 geno_bedfile$Start<-as.integer(geno_anno$pos)
 geno_bedfile$End<-as.integer(geno_anno$pos+1)
 geno_bedfile$ID<-geno_anno$id
-write.table(geno_bedfile, "X:/leafcutter/geno_bedfile_for_liftover.bed", sep = "\t", col.names = F, row.names = F, quote = F)
+write.table(geno_bedfile, "/path/leafcutter/geno_bedfile_for_liftover.bed", sep = "\t", col.names = F, row.names = F, quote = F)
 
 
-lifted<-read.delim("X:/leafcutter/geno_bedfile_hg38-uplifted.bed",
+lifted<-read.delim("/path/leafcutter/geno_bedfile_hg38-uplifted.bed",
                    sep = "\t", header = F, as.is = T, stringsAsFactors = F)
 
 geno_nt_filt<-geno_nt[which(row.names(geno_nt)%in%lifted$V4),]
 geno_il1b_filt<-geno_il1b[which(row.names(geno_il1b)%in%lifted$V4),]
 
 
-write.table(geno_nt_filt, "X:/leafcutter/hg38_splicing_QTLs/notx/genotypes_NT_ordered.txt",
+write.table(geno_nt_filt, "/path/notx/genotypes_NT_ordered.txt",
             sep = "\t", col.names = NA, row.names = T, quote = F)
-write.table(geno_il1b_filt, "X:/leafcutter/hg38_splicing_QTLs/il1b/genotypes_IL1B_ordered.txt",
+write.table(geno_il1b_filt, "/path/il1b/genotypes_IL1B_ordered.txt",
             sep = "\t", col.names = NA, row.names = T, quote = F)
 
 geno_anno_toPrint<-geno_anno[which(geno_anno$id%in%lifted$V4),]
 geno_anno_toPrint$pos<-lifted$V2[match(geno_anno_toPrint$id, lifted$V4)]
-write.table(geno_anno_toPrint,"X:/leafcutter/hg38_splicing_QTLs/notx/Genotype_annotations_notx.txt",
+write.table(geno_anno_toPrint,"/path/notx/Genotype_annotations_notx.txt",
             sep = "\t", col.names = T, row.names = F, quote = F)
+
 
