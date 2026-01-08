@@ -2,44 +2,44 @@ library(tidyverse)
 library(dplyr)
 
 ########################### NOTX ###########################
-ntqtls <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/notx/splicing_QTLs_notx_rna_cis100kbCis_genelevelfdr0.05sig.txt", as.is = T, stringsAsFactors = F)
+ntqtls <- read.delim("/path/notx/splicing_QTLs_notx_rna_cis100kbCis_genelevelfdr0.05sig.txt", as.is = T, stringsAsFactors = F)
 
 #adding in the gene symbols
-clust_anno<-read.delim("/data3/leafcutter/hg38_bamfiles/final_set/final_hg38_cluster_significance.txt",
+clust_anno<-read.delim("/path/final_hg38_cluster_significance.txt",
                      sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 clust_anno$cluster_base_name<-unlist(lapply(strsplit(clust_anno$cluster, ":"), "[[",2))
 
 #ntqtls$GeneSym<-clust_anno$genes[match(ntqtls$Cluster_name, clust_anno$cluster_base_name)]
 
 #Adding in the eQTL data
-notx_eQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/rna/notx/20_01_27_gene.level.FDR_PROCESSED.w.Betas.txt",
+notx_eQTL<-read.delim("/path/rna/notx/20_01_27_gene.level.FDR_PROCESSED.w.Betas.txt",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_eQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/rna/il1b/20_01_27_gene.level.FDR_PROCESSED.w.Betas.txt",
+il1b_eQTL<-read.delim("/path/rna/il1b/20_01_27_gene.level.FDR_PROCESSED.w.Betas.txt",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 ## add in molQTL data
-notx_histQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/h3k27ac_chip/notx/results_PROCESSED_18_12_12_h3k27ac_notx_peakOnly_given.txt",
+notx_histQTL<-read.delim("/path/h3k27ac_chip/notx/results_PROCESSED_18_12_12_h3k27ac_notx_peakOnly_given.txt",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_histQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/h3k27ac_chip/il1b/results_PROCESSED_18_12_12_h3k27ac_il1b_peakOnly_given.txt",
+il1b_histQTL<-read.delim("/path/h3k27ac_chip/il1b/results_PROCESSED_18_12_12_h3k27ac_il1b_peakOnly_given.txt",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_p65QTL <- read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/p65_chip/il1b/results_PROCESSED_18_12_12_p65_il1b_peakOnly_given.txt", 
+il1b_p65QTL <- read.delim("/path/p65_chip/il1b/results_PROCESSED_18_12_12_p65_il1b_peakOnly_given.txt", 
                           sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-notx_ergQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/erg_chip/notx/results_PROCESSED_18_12_12_erg_notx_peakOnly_given.txt",
+notx_ergQTL<-read.delim("/path/erg_chip/notx/results_PROCESSED_18_12_12_erg_notx_peakOnly_given.txt",
                          sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_ergQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/erg_chip/il1b/results_PROCESSED_18_12_12_erg_il1b_peakOnly_given.txt",
+il1b_ergQTL<-read.delim("/path/erg_chip/il1b/results_PROCESSED_18_12_12_erg_il1b_peakOnly_given.txt",
                          sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 ### add caQTLs (ATAC)
-notx_caQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/atac/notx/results_PROCESSED_18_12_12_atac_notx_peakOnly_given.txt",
+notx_caQTL<-read.delim("/path/atac/notx/results_PROCESSED_18_12_12_atac_notx_peakOnly_given.txt",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_caQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/atac/il1b/results_PROCESSED_18_12_12_atac_il1b_peakOnly_given.txt",
+il1b_caQTL<-read.delim("/path/atac/il1b/results_PROCESSED_18_12_12_atac_il1b_peakOnly_given.txt",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 #Add in the differential splicing info
-leaf <- read.delim("/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth.txt", as.is = T, stringsAsFactors = F)
+leaf <- read.delim("/path/annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth.txt", as.is = T, stringsAsFactors = F)
 
 ####Putting in the differential expression data
-diff_exp<-read.delim("/data3/leafcutter/hg38_tagdirs/final_set/22_09_07_edgeR_differentialExpression-Treatment_coef_PCA.ancestry_Sex_UniTags.txt",
+diff_exp<-read.delim("/path/22_09_07_edgeR_differentialExpression-Treatment_coef_PCA.ancestry_Sex_UniTags.txt",
                      sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 
@@ -95,15 +95,15 @@ combined %>%
   tibble() -> introns
 
 #### annotating the results that weren't tested for diff splicing but were tested for sQTLs:
-suppa.AF <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_AF_RESULTS.txt", as.is = T, stringsAsFactors=F)
-suppa.AL <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_AL_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.A3 <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_A3_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.A5 <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_A5_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.MX <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_MX_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.RI <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_RI_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.AF <- read.delim("/path/variGene_diffSplice_SUPPA_AF_RESULTS.txt", as.is = T, stringsAsFactors=F)
+suppa.AL <- read.delim("/path/variGene_diffSplice_SUPPA_AL_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.A3 <- read.delim("/path/variGene_diffSplice_SUPPA_A3_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.A5 <- read.delim("/path/variGene_diffSplice_SUPPA_A5_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.MX <- read.delim("/path/variGene_diffSplice_SUPPA_MX_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.RI <- read.delim("/path/variGene_diffSplice_SUPPA_RI_RESULTS.txt", as.is = T, stringsAsFactors=T)
 ## the names in this file are not correct, fix before annotating
 names(suppa.RI) <- c("gene_ID", "gene_sym", "chr", "s1", "strand", "e2", "e1.s2", "psiPerLocalEvent_dPSI", "psiPerLocalEvent_pValue")
-suppa.SE <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_SE_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.SE <- read.delim("/path/variGene_diffSplice_SUPPA_SE_RESULTS.txt", as.is = T, stringsAsFactors=T)
 ## SE splices need to add e1-s3 (the "long" splice)
 e1 <- lapply(strsplit(suppa.SE$e1.s2, "-"), "[[", 1)
 e3 <- lapply(strsplit(suppa.SE$e2.s3, "-"), "[[", 2)
@@ -138,49 +138,49 @@ introns %>%
 combined$spliceType = ifelse(is.na(combined$spliceType), introns$final_ann[match(combined$intron, introns$intron)], combined$spliceType)
 
 ####### save the results
-write.table(combined, "/data3/anna/splicing_ms_2025/final_data/2025_06_26_final_sQTL_results_LDpruned_with_molQTLs_eQTLs_diffSPl_diffExpn_GWAS.txt", sep = "\t", col.names = T, quote = F)
+write.table(combined, "/path/2025_06_26_final_sQTL_results_LDpruned_with_molQTLs_eQTLs_diffSPl_diffExpn_GWAS.txt", sep = "\t", col.names = T, quote = F)
 
 
 
 ########################### IL1B ###########################
-ntqtls <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/il1b/splicing_QTLs_il1b_rna_cis100kbCis_genelevelfdr0.05sig.txt", as.is = T, stringsAsFactors = F)
+ntqtls <- read.delim("/path/il1b/splicing_QTLs_il1b_rna_cis100kbCis_genelevelfdr0.05sig.txt", as.is = T, stringsAsFactors = F)
 
 #adding in the gene symbols
-clust_anno<-read.delim("/data3/leafcutter/hg38_bamfiles/final_set/final_hg38_cluster_significance.txt",
+clust_anno<-read.delim("/path/final_hg38_cluster_significance.txt",
                        sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 clust_anno$cluster_base_name<-unlist(lapply(strsplit(clust_anno$cluster, ":"), "[[",2))
 
 #ntqtls$GeneSym<-clust_anno$genes[match(ntqtls$Cluster_name, clust_anno$cluster_base_name)]
 
 #Adding in the eQTL data
-notx_eQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/rna/notx/20_01_27_gene.level.FDR_PROCESSED.w.Betas.txt",
+notx_eQTL<-read.delim("/path/rna/notx/20_01_27_gene.level.FDR_PROCESSED.w.Betas.txt",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_eQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/rna/il1b/20_01_27_gene.level.FDR_PROCESSED.w.Betas.txt",
+il1b_eQTL<-read.delim("/path/rna/il1b/20_01_27_gene.level.FDR_PROCESSED.w.Betas.txt",
                       sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 ## add in molQTL data
-notx_histQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/h3k27ac_chip/notx/results_PROCESSED_18_12_12_h3k27ac_notx_peakOnly_given.txt",
+notx_histQTL<-read.delim("/path/h3k27ac_chip/notx/results_PROCESSED_18_12_12_h3k27ac_notx_peakOnly_given.txt",
                          sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_histQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/h3k27ac_chip/il1b/results_PROCESSED_18_12_12_h3k27ac_il1b_peakOnly_given.txt",
+il1b_histQTL<-read.delim("/path/h3k27ac_chip/il1b/results_PROCESSED_18_12_12_h3k27ac_il1b_peakOnly_given.txt",
                          sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_p65QTL <- read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/p65_chip/il1b/results_PROCESSED_18_12_12_p65_il1b_peakOnly_given.txt", 
+il1b_p65QTL <- read.delim("/path/p65_chip/il1b/results_PROCESSED_18_12_12_p65_il1b_peakOnly_given.txt", 
                           sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-notx_ergQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/erg_chip/notx/results_PROCESSED_18_12_12_erg_notx_peakOnly_given.txt",
+notx_ergQTL<-read.delim("/path/erg_chip/notx/results_PROCESSED_18_12_12_erg_notx_peakOnly_given.txt",
                         sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_ergQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/erg_chip/il1b/results_PROCESSED_18_12_12_erg_il1b_peakOnly_given.txt",
+il1b_ergQTL<-read.delim("/path/erg_chip/il1b/results_PROCESSED_18_12_12_erg_il1b_peakOnly_given.txt",
                         sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 ### add caQTLs (ATAC)
-notx_caQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/atac/notx/results_PROCESSED_18_12_12_atac_notx_peakOnly_given.txt",
+notx_caQTL<-read.delim("/path/atac/notx/results_PROCESSED_18_12_12_atac_notx_peakOnly_given.txt",
                        sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-il1b_caQTL<-read.delim("/data4/vari-gene-final/hg19/QTL_results-FINAL/atac/il1b/results_PROCESSED_18_12_12_atac_il1b_peakOnly_given.txt",
+il1b_caQTL<-read.delim("/path/atac/il1b/results_PROCESSED_18_12_12_atac_il1b_peakOnly_given.txt",
                        sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 #Add in the differential splicing info
-leaf <- read.delim("/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth.txt", as.is = T, stringsAsFactors = F)
+leaf <- read.delim("/path/annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth.txt", as.is = T, stringsAsFactors = F)
 
 ####Putting in the differential expression data
-diff_exp<-read.delim("/data3/leafcutter/hg38_tagdirs/final_set/22_09_07_edgeR_differentialExpression-Treatment_coef_PCA.ancestry_Sex_UniTags.txt",
+diff_exp<-read.delim("/path/22_09_07_edgeR_differentialExpression-Treatment_coef_PCA.ancestry_Sex_UniTags.txt",
                      sep = "\t", header = T, as.is = T, stringsAsFactors = F)
 
 
@@ -236,15 +236,15 @@ combined_il1b %>%
   tibble() -> introns
 
 #### annotating the results that weren't tested for diff splicing but were tested for sQTLs:
-suppa.AF <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_AF_RESULTS.txt", as.is = T, stringsAsFactors=F)
-suppa.AL <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_AL_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.A3 <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_A3_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.A5 <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_A5_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.MX <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_MX_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.RI <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_RI_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.AF <- read.delim("/path/variGene_diffSplice_SUPPA_AF_RESULTS.txt", as.is = T, stringsAsFactors=F)
+suppa.AL <- read.delim("/path/variGene_diffSplice_SUPPA_AL_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.A3 <- read.delim("/path/variGene_diffSplice_SUPPA_A3_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.A5 <- read.delim("/path/variGene_diffSplice_SUPPA_A5_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.MX <- read.delim("/path/variGene_diffSplice_SUPPA_MX_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.RI <- read.delim("/path/variGene_diffSplice_SUPPA_RI_RESULTS.txt", as.is = T, stringsAsFactors=T)
 ## the names in this file are not correct, fix before annotating
 names(suppa.RI) <- c("gene_ID", "gene_sym", "chr", "s1", "strand", "e2", "e1.s2", "psiPerLocalEvent_dPSI", "psiPerLocalEvent_pValue")
-suppa.SE <- read.delim("/data3/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_SE_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.SE <- read.delim("/path/variGene_diffSplice_SUPPA_SE_RESULTS.txt", as.is = T, stringsAsFactors=T)
 ## SE splices need to add e1-s3 (the "long" splice)
 e1 <- lapply(strsplit(suppa.SE$e1.s2, "-"), "[[", 1)
 e3 <- lapply(strsplit(suppa.SE$e2.s3, "-"), "[[", 2)
@@ -279,7 +279,7 @@ introns %>%
 combined_il1b$spliceType = ifelse(is.na(combined_il1b$spliceType), introns$final_ann[match(combined_il1b$intron, introns$intron)], combined_il1b$spliceType)
 
 ####### save the results
-write.table(combined_il1b, "/data3/anna/splicing_ms_2025/final_data/2025_06_26_final_IL1B_sQTL_results_LDpruned_with_molQTLs_eQTLs_diffSPl_diffExpn_GWAS.txt", sep = "\t", col.names = T, quote = F)
+write.table(combined_il1b, "/path/2025_06_26_final_IL1B_sQTL_results_LDpruned_with_molQTLs_eQTLs_diffSPl_diffExpn_GWAS.txt", sep = "\t", col.names = T, quote = F)
 
 #################################COMBINE THE TWO TREATMENTS ############################
 combined_il1b$sqtl_treatment = "IL1B"
@@ -288,18 +288,18 @@ combined %>% mutate(sqtl_treatment = "notx") %>%
   tibble() -> combined
 
 ### save
-write.table(combined, "/data3/anna/splicing_ms_2025/final_data/2025_06_30_final_NTandIL1B_sQTL_results_FDR0.05_with_molQTLs_eQTLs_diffSPl_diffExpn.txt", sep = "\t", col.names = T, quote = F, row.names = F)
+write.table(combined, "/path/2025_06_30_final_NTandIL1B_sQTL_results_FDR0.05_with_molQTLs_eQTLs_diffSPl_diffExpn.txt", sep = "\t", col.names = T, quote = F, row.names = F)
 
 ##################### VISUALIZE RESULTS ##########################
 ##### add distance to junction and TSS
-geno.ann <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/notx/Genotype_annotations_notx.txt", as.is=T, stringsAsFactors = F)
+geno.ann <- read.delim("notx/Genotype_annotations_notx.txt", as.is=T, stringsAsFactors = F)
 
 combined %>% ungroup() %>% 
   mutate(chr = geno.ann$chr[match(snps, geno.ann$id)], 
          pos = geno.ann$pos[match(snps, geno.ann$id)]) -> combined
 
 
-hg38 <- readGFF("/Volumes/data3/leafcutter/anno_files/hg38_anno/gencode.v26.annotation.gtf")
+hg38 <- readGFF("/path/anno_files/hg38_anno/gencode.v26.annotation.gtf")
 
 firstExons <- hg38[hg38$exon_number == "1" & !is.na(hg38$exon_number) & hg38$type == 'exon',]
 
@@ -345,8 +345,8 @@ combined %>%
   ) -> combined_ann
 
 ### save annotated result
-write.table(combined_ann, "/Volumes/data3/anna/splicing_ms_2025/final_data/2025_06_26_final_IL1BandNotx_sQTL_results_LDpruned_with_molQTLs_eQTLs_diffSPl_diffExpn_GWAS.txt", sep = "\t", quote = F)
-combined_ann <- read.delim("/Volumes/data3/anna/splicing_ms_2025/final_data/2025_06_26_final_IL1BandNotx_sQTL_results_LDpruned_with_molQTLs_eQTLs_diffSPl_diffExpn_GWAS.txt", as.is = T, stringsAsFactors = F)
+write.table(combined_ann, "2025_06_26_final_IL1BandNotx_sQTL_results_LDpruned_with_molQTLs_eQTLs_diffSPl_diffExpn_GWAS.txt", sep = "\t", quote = F)
+#combined_ann <- read.delim("2025_06_26_final_IL1BandNotx_sQTL_results_LDpruned_with_molQTLs_eQTLs_diffSPl_diffExpn_GWAS.txt", as.is = T, stringsAsFactors = F)
 
 ## make a version of this that is with all three in one plot--it'll be easier to see and there really isn't a functional difference between the 5' and 3' junction (at least that I see)
 bins = c(seq(0, 1000, by = 100), seq(1000, 5000, by = 1000), seq(5000, 20000, by = 5000), seq(20000, 100000, by = 10000))
@@ -461,7 +461,7 @@ ggplot(combined_ann[combined_ann$spliceType %in% combined_ann$spliceType_toplot,
   coord_flip()  -> sGenes
 
 # plot DSTs too so they're the same size and fit next to each other
-leaf <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
+leaf <- read.delim("annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
 leaf$spliceType_toplot <- factor(ifelse(as.character(leaf$spliceType) %in% c("cryptic_threeprime", "cryptic_fiveprime", "cryptic_unanchored", "novel annotated pair", "unknown_strand"), "cryptic", as.character(leaf$spliceType)), levels =c("A3", "A5", "AF", "AL", "MX", "RI", "SE", "cryptic"))
 
 palette <- c("#76E1B2", "#E56E63", "#BB46E0", "#DCC7D8", "#D0DEAF", "#DDAB69", "#83A1DA", "#96DADD", "#9272D5", "#85E359", "#DE77B6", "#7E7D73", "#D8E068")
