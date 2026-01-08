@@ -7,14 +7,14 @@ library(dplyr)
 library(purrr)
 library(GenomicRanges)
 
-hg38 <- readGFF("/Volumes/data3/splicing_SUPPA/hg38_anno_files/gencode.v41.annotation.gtf")
+hg38 <- readGFF("/path/hg38_anno_files/gencode.v41.annotation.gtf")
 names(hg38)
 table(hg38$type)
 stops <- hg38[hg38$type == "stop_codon",]
 
 ## match up with leafcutter results
 
-leaf <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth.txt", as.is = T, stringsAsFactors = F)
+leaf <- read.delim("/path/leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth.txt", as.is = T, stringsAsFactors = F)
 
 # add start and stops
 leaf$start_chr <- vapply(strsplit(leaf$chrjunction, split = "-"), function(x) paste(x[c(1,2)], collapse = ":"), character(1L))
@@ -122,7 +122,7 @@ ggplot(na.omit(leaf[leaf$p.adjust < 0.05 & abs(leaf$deltapsi) > 0.05 & !leaf$spl
   geom_bar(position = "fill") + scale_fill_manual(values = c("skyblue1", "coral2"), name = "Transcript type") + ylab("Proportion of DSTs") + xlab("Splice type") + ggtitle("NMD and protein coding DSTs")  + geom_hline(yintercept = 0.75, linetype = "dashed") + theme(text = element_text(size = 12))
 
 ### save
-write.table(leaf, "/Volumes/data3/anna/splicing_ms_2025/final_data/leafcutter_53HAECsIL1Bornotx_annotated_NMDorProteinCoding.txt", sep = "\t", quote = F)
+write.table(leaf, "/path/leafcutter_53HAECsIL1Bornotx_annotated_NMDorProteinCoding.txt", sep = "\t", quote = F)
 
 df <- data.frame(table(sign(leaf$deltapsi[leaf$p.adjust < 0.05 & abs(leaf$deltapsi) > 0.05 & leaf$stopCodonCategory_3prime == "nonsense_mediated_decay" & leaf$stop_3prime_dist_str < 50]), leaf$spliceType_toplot[leaf$p.adjust < 0.05 & abs(leaf$deltapsi) > 0.05 & leaf$stopCodonCategory_3prime == "nonsense_mediated_decay" & leaf$stop_3prime_dist_str < 50]))
 
@@ -154,7 +154,7 @@ unique(dsgs_ann$exons5prime)
 
 #### and for sQTLs:
 
-sqtl.notx <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/notx/splicing_QTLs_notx_rna_cis1000bpCis.txt",as.is = T, stringsAsFactors = F)
+sqtl.notx <- read.delim("/path/notx/splicing_QTLs_notx_rna_cis1000bpCis.txt",as.is = T, stringsAsFactors = F)
 head(sqtl.notx)
 
 sqtl.notx$start <- vapply(strsplit(sqtl.notx$gene, split = ":"), function(x) paste(x[c(2)], collapse = ":"), character(1L))
