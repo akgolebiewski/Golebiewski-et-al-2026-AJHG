@@ -1,18 +1,11 @@
 #####matching SUPPA results to leafcutter results A5/cryptic_threeprime/24
 
-############ RE DOING THIS TO FIX MISTAKES
-
-setwd("/Volumes/data3/anna/splicing_analysis_2024/")
-
-# Y: = /data3/ on romlab
-
-
-leaf.effect <- read.delim("Y:/leafcutter/hg38_tagdirs/final_set/final_hg38_wDepth_effect_sizes.txt", as.is = T, stringsAsFactors=T)
-leaf.signif <- read.delim("Y:/leafcutter/hg38_tagdirs/final_set/final_hg38_wDepth_cluster_significance.txt", as.is = T, stringsAsFactors=T)
+leaf.effect <- read.delim("/path/final_hg38_wDepth_effect_sizes.txt", as.is = T, stringsAsFactors=T)
+leaf.signif <- read.delim("/path/final_hg38_wDepth_cluster_significance.txt", as.is = T, stringsAsFactors=T)
 #remove extra columns from significance file
 leaf.signif <- leaf.signif[,1:cryptic_threeprime]
 
-leaf.ann <- read.delim("Y:/leafcutter/hg38_tagdirs/final_set/cluster_annotations_final_set_w_depth.txt", as.is = T, stringsAsFactors=F)
+leaf.ann <- read.delim("/path/cluster_annotations_final_set_w_depth.txt", as.is = T, stringsAsFactors=F)
 
 
 ## split up the cluster IDs so we can merge the effect size and the significance
@@ -36,7 +29,7 @@ leaf$chrjunction <- vapply(strsplit(leaf$intron, ":", fixed = TRUE), function(x)
   
   
 ### need strand!!
-intron_db <- fread(paste0("zcat < ", "Y:/leafcutter/leafcutter/leafviz/annotation_codes/genecode_chr_hg38/hg38_Genecode_CHRgtf_all_introns.bed.gz"), data.table = FALSE)
+intron_db <- fread(paste0("zcat < ", "/path/hg38_Genecode_CHRgtf_all_introns.bed.gz"), data.table = FALSE)
 head(intron_db)
 intron_db$junction <- paste(intron_db$V1, intron_db$V2, intron_db$V3, sep = "-")
 
@@ -45,7 +38,7 @@ intron_db$junction <- paste(intron_db$V1, intron_db$V2, intron_db$V3, sep = "-")
 leaf$strand <- intron_db$V6[match(leaf$chrjunction, intron_db$junction)]
 
 ### add more detail about the cryptic splices
-leaf.intron.ann <- read.delim("Y:/leafcutter/hg38_tagdirs/final_set/intron_annotations_final_set_w_depth.txt", as.is = T, stringsAsFactors=F)
+leaf.intron.ann <- read.delim("/path/intron_annotations_final_set_w_depth.txt", as.is = T, stringsAsFactors=F)
 leaf.intron.ann$junction <- paste(leaf.intron.ann$start, leaf.intron.ann$end, sep = "-")
 
 leaf <- merge(leaf, leaf.intron.ann[, c("junction", "verdict", "transcripts")], by = "junction")
@@ -55,15 +48,15 @@ names(leaf)[names(leaf) == "verdict"] <- "intron_annotation"
 
 ## read in SUPPA results by splice type
 ## these are the "new" gencode results (v44)
-suppa.AF <- read.delim("Y:/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_AF_RESULTS.txt", as.is = T, stringsAsFactors=F)
-suppa.AL <- read.delim("Y:/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_AL_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.A3 <- read.delim("Y:/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_A3_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.A5 <- read.delim("Y:/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_A5_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.MX <- read.delim("Y:/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_MX_RESULTS.txt", as.is = T, stringsAsFactors=T)
-suppa.RI <- read.delim("Y:/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_RI_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.AF <- read.delim("/path/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_AF_RESULTS.txt", as.is = T, stringsAsFactors=F)
+suppa.AL <- read.delim("/path/2023_04_13_variGene_diffSplice_SUPPA_AL_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.A3 <- read.delim("/path/2023_04_13_variGene_diffSplice_SUPPA_A3_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.A5 <- read.delim("/path/2023_04_13_variGene_diffSplice_SUPPA_A5_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.MX <- read.delim("/path/2023_04_13_variGene_diffSplice_SUPPA_MX_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.RI <- read.delim("/path/2023_04_13_variGene_diffSplice_SUPPA_RI_RESULTS.txt", as.is = T, stringsAsFactors=T)
 ## the names in this file are not correct, fix before annotating
 names(suppa.RI) <- c("gene_ID", "gene_sym", "chr", "s1", "strand", "e2", "e1.s2", "psiPerLocalEvent_dPSI", "psiPerLocalEvent_pValue")
-suppa.SE <- read.delim("Y:/splicing_SUPPA/SUPPA_outputs/RESULTS/2023_04_13_variGene_diffSplice_SUPPA_SE_RESULTS.txt", as.is = T, stringsAsFactors=T)
+suppa.SE <- read.delim("/path/2023_04_13_variGene_diffSplice_SUPPA_SE_RESULTS.txt", as.is = T, stringsAsFactors=T)
 ## SE splices need to add e1-s3 (the "long" splice)
 e1 <- lapply(strsplit(suppa.SE$e1.s2, "-"), "[[", 1)
 e3 <- lapply(strsplit(suppa.SE$e2.s3, "-"), "[[", 2)
@@ -212,9 +205,7 @@ table(leaf$spliceType)
 
 
 #### save this dataframe
-write.table(leaf, "Y:/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", sep = "\t", quote = F)
-#leaf <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
-
+write.table(leaf, "/path/leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", sep = "\t", quote = F)
 
 
 ## make a dataframe with the number of significant splices for each type
@@ -248,7 +239,7 @@ ggplot(leaf, aes(x=spliceType, fill = spliceType)) +
 
 
 ## histogram by deltaPSI 
-pdf("/Volumes/data3/anna/splicing_ms_2025/figures/DST_effect_size_histograms.pdf", height = 3, width = 6)
+pdf("/DST_effect_size_histograms.pdf", height = 3, width = 6)
 ggplot(leaf[!leaf$spliceType_toplot == "cryptic",], aes(x = deltapsi, color = spliceType_toplot)) +
   geom_line(
     stat = "density", size = 1) +
@@ -278,7 +269,7 @@ dev.off()
 
 #### make the same plots but only with dpsi > 0.05
 ## barplot of number of splices by type
-pdf("/Volumes/data3/anna/splicing_ms_2025/figures/barplot_spliceTypes.pdf")
+pdf("/barplot_spliceTypes.pdf")
 ggplot(leaf[abs(leaf$deltapsi) > 0.05 & !leaf$spliceType_toplot == "cryptic",], aes(x= fct_rev(fct_infreq(spliceType_toplot)) , fill = spliceType_toplot)) +
   geom_bar(stat="count", position = "dodge") +
   geom_text(stat = "count", aes(label = ..count..), hjust = -0.1) +
@@ -291,7 +282,7 @@ dev.off()
 
 #### volcano plot
 library(ggrepel)
-pdf("/Volumes/data3/anna/splicing_ms_2025/figures/53HAECs_volcanoPlot_dpsi.pdf")
+pdf("/53HAECs_volcanoPlot_dpsi.pdf")
 ggplot(leaf, aes(x = deltapsi, y = -log10(p.adjust))) +
   geom_point(size = 0.75) +
   theme_classic() + 
@@ -321,8 +312,8 @@ for (type in splicetypes) {
   il1b = leaf[leaf$spliceType == type & leaf$deltapsi > 0,]
   assign(paste0(type, "_notx"), notx)
   assign(paste0(type, "_il1b"), il1b)
- write.table(notx, paste0("Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_", "notx_", type, ".txt"), sep = "\t", quote = F, row.names = F)
-write.table(il1b, paste0("Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_", "il1b_", type, ".txt"), sep = "\t", quote = F, row.names = F)
+ write.table(notx, paste0("/path/53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_", "notx_", type, ".txt"), sep = "\t", quote = F, row.names = F)
+write.table(il1b, paste0("/path/53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_", "il1b_", type, ".txt"), sep = "\t", quote = F, row.names = F)
   notx.peak = data.frame(uniquePeakID = unlist(notx$intron),
                          chr = unlist(lapply(strsplit(notx$intron, ":"), "[[", 1)),
                          start = unlist(lapply(strsplit(notx$intron, ":"), "[[", 2)),
@@ -331,7 +322,7 @@ write.table(il1b, paste0("Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Born
   row.names(notx.peak) <- NULL
   names(notx.peak) <- NULL
   assign(paste0(type, "_notx_peak"), notx.peak)
-  write.table(notx.peak, paste0("Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_", "notx_", type, "peakFile.txt"), sep = "\t", quote = F, row.names = F)
+  write.table(notx.peak, paste0("/path/53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_", "notx_", type, "peakFile.txt"), sep = "\t", quote = F, row.names = F)
   il1b.peak = data.frame(uniquePeakID = unlist(il1b$intron),
                          chr = unlist(lapply(strsplit(il1b$intron, ":"), "[[", 1)),
                          start = unlist(lapply(strsplit(il1b$intron, ":"), "[[", 2)),
@@ -340,7 +331,7 @@ write.table(il1b, paste0("Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Born
   row.names(il1b.peak) <- NULL
   names(il1b.peak) <- NULL
   assign(paste0(type, "_il1b_peak"), il1b.peak)
-  write.table(il1b.peak, paste0("Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Boril1b_final_set_w_depth_pvalueSig_dpsi0.05_", "il1b_", type, "peakFile.txt"), sep = "\t", quote = F, row.names = F)
+  write.table(il1b.peak, paste0("/path/53HAECsIL1Boril1b_final_set_w_depth_pvalueSig_dpsi0.05_", "il1b_", type, "peakFile.txt"), sep = "\t", quote = F, row.names = F)
 }
 
 
@@ -355,7 +346,7 @@ notx.peak = data.frame(uniquePeakID = unlist(notx$intron),
                        strand = notx$strand)
 row.names(notx.peak) <- NULL
 names(notx.peak) <- NULL
-write.table(notx.peak, paste0("Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_notx_ALLsplices_peakFile.txt"), sep = "\t", quote = F, row.names = F)
+write.table(notx.peak, paste0("/path/53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_notx_ALLsplices_peakFile.txt"), sep = "\t", quote = F, row.names = F)
 il1b.peak = data.frame(uniquePeakID = unlist(il1b$intron),
                        chr = unlist(lapply(strsplit(il1b$intron, ":"), "[[", 1)),
                        start = unlist(lapply(strsplit(il1b$intron, ":"), "[[", 2)),
@@ -363,7 +354,7 @@ il1b.peak = data.frame(uniquePeakID = unlist(il1b$intron),
                        strand = il1b$strand)
 row.names(il1b.peak) <- NULL
 names(il1b.peak) <- NULL
-write.table(il1b.peak, paste0("Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_il1b_ALLsplices_peakFile.txt"), sep = "\t", quote = F, row.names = F)
+write.table(il1b.peak, paste0("/path/53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_il1b_ALLsplices_peakFile.txt"), sep = "\t", quote = F, row.names = F)
 
 
 
@@ -375,7 +366,7 @@ all.intron.peaks <- data.frame(uniquePeakID = unlist(leaf$intron),
                             strand = leaf$strand)
 row.names(all.intron.peaks) <- NULL
 names(all.intron.peaks) <- NULL
-write.table(all.intron.peaks,"Y:/anna/splicing_analysis_2024/20240321_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_ALLsplices_peakFile.txt", sep = "\t", quote = F, row.names = F)
+write.table(all.intron.peaks,"/path/53HAECsIL1Bornotx_final_set_w_depth_pvalueSig_dpsi0.05_ALLsplices_peakFile.txt", sep = "\t", quote = F, row.names = F)
   
 
 
@@ -391,45 +382,6 @@ keytypes(org.Hs.eg.db)
 
 
 # pull out gene names and deltapsi for il1b regulated transcripts
-# we can't run this as "normal" with notx vs il1b because the gene symbols are the same and GSEA is not optimized for transcript specific things so just take the list of DSGs with deltapsi > 0
-gene_list <- il1b$deltapsi
-names(gene_list) <- unlist(lapply(strsplit(as.character(il1b$genes), split = ","), "[[", 1))
-#names(gene_list) <- unlist(lapply(strsplit(as.character(il1b$transcript), split = "\\+"), "[[", 1))
-
-# order by deltapsi
-gene_list <- gene_list[order(gene_list, decreasing = T)]
-
-
-
-gse.GO <- gseGO(geneList=gene_list, 
-                ont ="ALL", #can be set to "BP" (biological process), "MF" (molecular function), "CC" (cell component), or "ALL" depending on what gene sets you want to test
-                keyType = "SYMBOL",
-                minGSSize = 10, #minimum number of genes in sets
-                maxGSSize = 500, #max number of genes in gene sets
-                pvalueCutoff = 0.1, #significance threshold
-                verbose = TRUE, 
-                OrgDb = organism, 
-                pAdjustMethod = "none",#can be BH, BY, fdr, or none
-                by = "fgsea",
-                eps = 0,
-                exponent = 1) 
-gse.GO.BP <- gseGO(geneList=gene_list, 
-                  ont ="BP", #can be set to "BP" (biological process), "MF" (molecular function), "CC" (cell component), or "ALL" depending on what gene sets you want to test
-                  keyType = "SYMBOL",
-                  minGSSize = 10, #minimum number of genes in sets
-                  maxGSSize = 500, #max number of genes in gene sets
-                  pvalueCutoff = 0.1, #significance threshold
-                  verbose = TRUE, 
-                  OrgDb = organism, 
-                  pAdjustMethod = "none",#can be BH, BY, fdr, or none
-                  by = "fgsea",
-                  eps = 0,
-                  exponent = 1) 
-
-
-dotplot(gse.GO, showCategory= 20) + ggtitle("All pathway enrichment in DSGs (p.adjust < 0.05)")
-dotplot(gse.GO.BP, showCategory= 20) + ggtitle("BP enrichment in DSGs (p.adjust < 0.05)")
-
 
 ## dpsi restriction
 gene_list2 <- il1b$deltapsi[il1b$deltapsi >0.05]
@@ -467,76 +419,6 @@ ggplot(gse_res[gse_res$Description %in% uniquecategories,], aes(x = NES, y = reo
 
 
 
-
-for (type in splicetypes) {
-gene_list <- il1b$deltapsi[il1b$spliceType == type]
-names(gene_list) <- unlist(lapply(strsplit(as.character(il1b$genes[il1b$spliceType == type]), split = ","), "[[", 1))
-gene_list <- gene_list[order(gene_list, decreasing = T)]
-#take the top 250 or all the genes if less than 250
-length <- ifelse(length(gene_list) > 250, 250, length(gene_list))
-gene_list <- gene_list[1:length]
-
-gse.GO <- gseGO(geneList=gene_list, 
-                ont ="BP", #can be set to "BP" (biological process), "MF" (molecular function), "CC" (cell component), or "ALL" depending on what gene sets you want to test
-                keyType = "SYMBOL",
-                minGSSize = 10, #minimum number of genes in sets
-                maxGSSize = 500, #max number of genes in gene sets
-                pvalueCutoff = 0.05, #significance threshold
-                verbose = TRUE, 
-                OrgDb = organism, 
-                pAdjustMethod = "none",#can be BH, BY, fdr, or none
-                by = "fgsea",
-                eps = 0,
-                exponent = 1,
-                nPermSimple = 10000) 
-assign(paste0(type, "_gene_list"), gene_list)
-assign( paste0(type,"_GSE.go"), gse.GO)
-
-dotplot(gse.GO, showCategory= 20) + ggtitle(paste("All pathway enrichment in DSGs (p.adjust < 0.05)", type, sep = " "))
-}
-
-
-dotplot(AF_GSE.go, showCategory= 10) + ggtitle("All pathway enrichment in AF DSGs (p.adjust < 0.05)")
-
-
-## or compare to each other
-library(dplyr)
-top300 <- leaf[c("genes", "deltapsi", "spliceType")] %>% group_by(spliceType) %>% top_n(n = 300, wt = deltapsi)
-df <- split(top300$genes, top300$spliceType)
-
-df$`AL` = bitr(df$'AL', fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$'AF' = bitr(df$'AF', fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$'A3' = bitr(df$'A3', fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$'A5' = bitr(df$`A5`, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$'MX' = bitr(df$'MX', fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$`SE` = bitr(df$`SE`, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$`RI` = bitr(df$`RI`, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$`cryptic_threeprime` = bitr(df$`cryptic_threeprime`, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$`cryptic_fiveprime` = bitr(df$`cryptic_fiveprime`, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-df$`cryptic_novel annotated pair` = bitr(df$`cryptic_novel annotated pair`, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
-
-
-
-#do the same here, a line like below for each cluster
-genelist <- list("AL" = df$'AL'$SYMBOL, 
-                 "AF" = df$'AF'$SYMBOL,
-                 "A3" = df$'A3'$SYMBOL,
-                 "A5" = df$`A5`$SYMBOL,
-                 "MX" = df$'MX'$SYMBOL,
-                 "SE" = df$`SE`$SYMBOL,
-                 "RI" = df$`RI`$SYMBOL,
-                 "cryptic_threeprime" = df$`cryptic_threeprime`$SYMBOL,
-                 "cryptic_fiveprime" = df$`cryptic_fiveprime`$SYMBOL,
-                 "cryptic_novel annotated pair" = df$`cryptic_novel annotated pair`$SYMBOL)
-
-GOclusterplot <- compareCluster(geneCluster = genelist, fun = "enrichGO",  pvalueCutoff = 1, pAdjustMethod = "BH", ont = "BP", OrgDb = organism, keyType = "SYMBOL")
-dotplot(GOclusterplot, showCategory = 5)
-
-
-GO_simplify <- simplify(GOclusterplot)
-dotplot(GO_simplify, showCategory = 3)
-
-
 ### it seems that lots of genes in the enriched pathways are AF genes, is that significant?
 head(gse_res)
 gse_res %>% filter(p.adjust < 0.05) %>% dplyr::select(core_enrichment, Description) %>% mutate(genes = strsplit(core_enrichment, "/")) -> gse_genes
@@ -558,7 +440,7 @@ prop_af <- unlist(count)/unlist(total)
 mean(prop_af)
 length(af_genes)/length(unique(leaf$genes))
 
-pdf("/Volumes/data3/anna/splicing_ms_2025/figures/AF_DSGs_inGOterms.pdf", width = 5, height = 5)
+pdf("/path/AF_DSGs_inGOterms.pdf", width = 5, height = 5)
 ggplot(as.data.frame(prop_af), aes(x = prop_af)) + geom_histogram(fill = "orchid", color = "black") + theme_bw() + geom_vline(xintercept = length(af_genes)/length(unique(leaf$genes)), linetype = "dashed", color = "red") + xlim(0,1) + xlab("Proportion of AF genes in GO term") + ylab("# of GO terms") + ggtitle("AF-DSG enrichment in GO terms") + geom_label(label = "% of AF-DSGs", y = 11, x = 0.2, colour = "red", label.size = 0)
 dev.off()
 
@@ -576,7 +458,7 @@ prop_se <- unlist(count_se)/unlist(total_se)
 mean(prop_se)
 length(se_genes)/length(unique(leaf$genes))
 
-pdf("/Volumes/data3/anna/splicing_ms_2025/figures/SE_DSGs_inGOterms.pdf", width = 5, height = 5)
+pdf("/path/SE_DSGs_inGOterms.pdf", width = 5, height = 5)
 ggplot(as.data.frame(prop_se), aes(x = prop_se)) + geom_histogram(fill = "steelblue", color = "black") + theme_bw() + geom_vline(xintercept = length(se_genes)/length(unique(leaf$genes)), linetype = "dashed", color = "red") + xlim(0,1) + xlab("Proportion of SE genes in GO term") + ylab("# of GO terms")+ ggtitle("SE-DSG enrichment in GO terms") + geom_label(label = "% of SE-DSGs", y = 15, x = 0.2, colour = "red", label.size = 0) 
 dev.off()
 
