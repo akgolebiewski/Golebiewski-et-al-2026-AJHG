@@ -6,14 +6,14 @@ library(biomaRt)
 library(rtracklayer)
 
 
-setwd("/data3/leafcutter/hg38_splicing_QTLs/coloc")
+setwd("/path/")
 
 #### set up genotypes and MAF
-geno <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/notx/genotypes_NT_ordered.txt", as.is = T, stringsAsFactors = F)
+geno <- read.delim("/path/notx/genotypes_NT_ordered.txt", as.is = T, stringsAsFactors = F)
 names(geno)
 names(geno)[names(geno) == "X"] <- "SNP"
 
-geno.ann <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/notx/Genotype_annotations_notx.txt", as.is=T, stringsAsFactors = F)
+geno.ann <- read.delim("/path/notx/Genotype_annotations_notx.txt", as.is=T, stringsAsFactors = F)
 #put IDs in the cad.sig.siggwas formatting
 #refalt <- vapply(strsplit(geno.ann$id, split = ":"), function(x) paste(x[c(3,4)], collapse = ":"), character(1L))
 chr <- gsub("chr", "", geno.ann$chr)
@@ -54,12 +54,12 @@ for (i in 2:nrow(traits)) {
 ############################## GWAS ################################
 
 # Import GWAS table
-gwas.full <- read_tsv(paste0("/data3/anna/splicing_analysis_2024/gwas_summary_stats_for_coloc/", filename, ".tsv.bgz"))
+gwas.full <- read_tsv(paste0("gwas_summary_stats_for_coloc/", filename, ".tsv.bgz"))
 # sum AF
 #gwas.full$af_meta <- rowMeans(gwas.full[, c("af_cases_meta", "af_controls_meta")])
   
 ## this GWAS was performed in hg19/GRCh37 and we need to lift the positions to hg38
-  path = "/data3/anna/splicing_analysis_2024/gwas_summary_stats_for_coloc/hg19ToHg38.over.chain"
+  path = "gwas_summary_stats_for_coloc/hg19ToHg38.over.chain"
   ch = import.chain(path)
   ch
   
@@ -99,7 +99,7 @@ treatments = c("il1b")
 for (tx in treatments) {
   # these are the snps with no pvalue restiriction! why: we want LD for all the signals in the region
   # BUT every intron in here has one sig SNP by gene_level_FDR
-  qtl <- read.delim(paste0("/data3/leafcutter/hg38_splicing_QTLs/", tx, "/splicing_QTLs_", tx, "_rna_cis100kbCis_allIntronsWithASigSNP_forSuSiE.txt"), as.is = T, stringsAsFactors = F)
+  qtl <- read.delim(paste0("/path/", tx, "/splicing_QTLs_", tx, "_rna_cis100kbCis_allIntronsWithASigSNP_forSuSiE.txt"), as.is = T, stringsAsFactors = F)
   
   qtl %>%
     # add SE and fix variant IDs to match gwas
@@ -188,8 +188,8 @@ summary<- summary[order(summary$PP.H4.abf, decreasing = T),]
 
 
 ## save results
-write.table(results, file = paste0("/data3/leafcutter/hg38_splicing_QTLs/coloc/20260625_coloc_", gwasname, "_sqtl_", tx, "_results.txt"), sep = "\t", quote = F)
-write.table(summary, file = paste0("/data3/leafcutter/hg38_splicing_QTLs/coloc/20250625_coloc_", gwasname, "_sqtl_", tx, "_summary.txt"), sep = "\t", quote = F)
+write.table(results, file = paste0("/path//20260625_coloc_", gwasname, "_sqtl_", tx, "_results.txt"), sep = "\t", quote = F)
+write.table(summary, file = paste0("/path//20250625_coloc_", gwasname, "_sqtl_", tx, "_summary.txt"), sep = "\t", quote = F)
 
 }
 
