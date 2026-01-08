@@ -5,10 +5,10 @@ library(ggplot2)
 set.seed(12347)
 
 ## read in macropahge results:
-macrophages <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/GSE147310/human_monocyte_derived_macrophages_leafcutter_summary.txt", as.is = T, stringsAsFactors = F)
+macrophages <- read.delim("/path/GSE147310/human_monocyte_derived_macrophages_leafcutter_summary.txt", as.is = T, stringsAsFactors = F)
 
 # read in HAEC result
-haecs <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth.txt", as.is = T, stringsAsFactors = F)
+haecs <- read.delim("/path/leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth.txt", as.is = T, stringsAsFactors = F)
 
 ## join dataframes
 macrophages %>%
