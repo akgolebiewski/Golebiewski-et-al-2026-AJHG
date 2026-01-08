@@ -4,7 +4,6 @@ library(dplyr)
 library(tidyverse)
 library(data.table)
 
-setwd("/data3/leafcutter/hg38_splicing_QTLs/coloc")
 
 traits <- data.frame(names = c("biomarkers-30760-both_sexes-irnt", "biomarkers-30690-both_sexes-irnt", "continuous-4079-both_sexes-irnt", "continuous-4080-both_sexes-irnt", "icd10-I25-both_sexes", "continuous-LDLC-both_sexes-medadj_irnt", "categorical-6152-both_sexes-5", "categorical-6152-both_sexes-7"),
                      pheno = c("HDLC", "totalCholesterol", "diastolicBP", "systolicBP", "CAD", "LDLC", "DVT", "PE"),
@@ -13,14 +12,14 @@ traits <- data.frame(names = c("biomarkers-30760-both_sexes-irnt", "biomarkers-3
 
 
 ### get the positions for the SNPs in hg19 to match back to gwas
-geno.ann <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/notx/Genotype_annotations_notx.txt", as.is=T, stringsAsFactors = F)
+geno.ann <- read.delim("/path/notx/Genotype_annotations_notx.txt", as.is=T, stringsAsFactors = F)
 
 hg19_ann <- read.delim("/data4/vari-gene-final/hg19/QTL_Testing_files/rna/matrixeqtl/Anno_file.txt")
 geno.ann %>% mutate(hg19_pos =  paste(hg19_ann$chr[match(id, hg19_ann$id)], hg19_ann$pos[match(id, hg19_ann$id)], sep = "_"),
                     hg38_pos = paste(chr, pos, sep = "_")) -> geno.ann
 
-ntqtls <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/splicing_QTLs_notx_cis100kbCis_LDpruned_genelevelfdrsig.txt", as.is = T, stringsAsFactors = F)
-il1bqtls <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/splicing_QTLs_il1b_cis100kbCis_LDpruned_genelevelfdrsig.txt", as.is = T, stringsAsFactors = F)
+ntqtls <- read.delim("/path/splicing_QTLs_notx_cis100kbCis_LDpruned_genelevelfdrsig.txt", as.is = T, stringsAsFactors = F)
+il1bqtls <- read.delim("/path/splicing_QTLs_il1b_cis100kbCis_LDpruned_genelevelfdrsig.txt", as.is = T, stringsAsFactors = F)
 
 #### for every trait, read in results and make a df of sig colocalizations
 for (tx in c("notx", "il1b")) {
@@ -32,12 +31,12 @@ for (i in 1:nrow(traits)) {
   
   
   # Import GWAS table
-  gwas.full <- read_tsv(paste0("/data3/anna/splicing_analysis_2024/gwas_summary_stats_for_coloc/", filename, ".tsv.bgz"))
+  gwas.full <- read_tsv(paste0("/path/gwas_summary_stats_for_coloc/", filename, ".tsv.bgz"))
   gwas.full %>% mutate(snp = paste0("chr", chr, "_", pos)) -> gwas.full
   
   # import results
-  summary <- read.delim(paste0("/data3/leafcutter/hg38_splicing_QTLs/coloc/20250625_coloc_", gwasname, "_sqtl_", tx, "_summary.txt"), as.is = T, stringsAsFactors = F)
-  results <- read.delim(paste0("/data3/leafcutter/hg38_splicing_QTLs/coloc/20250625_coloc_", gwasname, "_sqtl_", tx, "_results.txt"), as.is = T, stringsAsFactors = F)
+  summary <- read.delim(paste0("/path/coloc/20250625_coloc_", gwasname, "_sqtl_", tx, "_summary.txt"), as.is = T, stringsAsFactors = F)
+  results <- read.delim(paste0("/path/coloc/20250625_coloc_", gwasname, "_sqtl_", tx, "_results.txt"), as.is = T, stringsAsFactors = F)
   # get significant results (PP.H4 is > 0.8, 80% confidence of colocalization)
   summary %>% filter(PP.H4.abf > 0.8) -> sig_introns
   
@@ -104,13 +103,13 @@ listofdfs <- c(ls(pattern = "_notx"), ls(pattern = "_il1b"))
 
 coloc_all <- bind_rows(lapply(listofdfs, get))
 
-#write.table(coloc_all, "/data3/leafcutter/hg38_splicing_QTLs/coloc/20250625_coloc_HDLC_LDCL_totalchol_bloodpressure_panukbb_bothtreatments_summary.txt", sep = "\t", quote = F)
-#coloc_all <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/coloc/20250625_coloc_HDLC_LDCL_totalchol_bloodpressure_panukbb_summary.txt", as.is = T, stringsAsFactors = F)
+#write.table(coloc_all, "/path/coloc/20250625_coloc_HDLC_LDCL_totalchol_bloodpressure_panukbb_bothtreatments_summary.txt", sep = "\t", quote = F)
+#coloc_all <- read.delim("/path/coloc/20250625_coloc_HDLC_LDCL_totalchol_bloodpressure_panukbb_summary.txt", as.is = T, stringsAsFactors = F)
 
 ### add CAD from VanDerHarst
-cad <- read.delim(gzfile("/data2/vanDerHast_GWAS/29212778-GCST005194-EFO_0000378.h.tsv.gz"), sep = "\t")
-resil1b <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/20250115_coloc_vanderharstCAD_sQTLil1b_results.txt", as.is = T, stringsAsFactors = F)
-sumil1b <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/20250115_coloc_vanderharstCAD_sQTLil1b_summary.txt", as.is = T, stringsAsFactors = F)
+cad <- read.delim(gzfile("/path/vanDerHast_GWAS/29212778-GCST005194-EFO_0000378.h.tsv.gz"), sep = "\t")
+resil1b <- read.delim("/path/20250115_coloc_vanderharstCAD_sQTLil1b_results.txt", as.is = T, stringsAsFactors = F)
+sumil1b <- read.delim("/path/20250115_coloc_vanderharstCAD_sQTLil1b_summary.txt", as.is = T, stringsAsFactors = F)
 # summarize
 sig_events <- row.names(sumil1b)[sumil1b$PP.H4.abf > 0.8]
 sigil1b <- resil1b[resil1b$gene %in% sig_events,]
@@ -118,8 +117,8 @@ sigil1b %>% group_by(gene) %>% top_n(SNP.PP.H4, n = 1) -> causalil1b
 cad_il1b <- as.data.frame(causalil1b[!duplicated(causalil1b$gene),])
 
 # notx results CAD
-resnotx <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/20250115_coloc_vanderharstCAD_sQTLnotx_results.txt", as.is = T, stringsAsFactors = F)
-sumnotx <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/20250115_coloc_vanderharstCAD_sQTLnotx_summary.txt", as.is = T, stringsAsFactors = F)
+resnotx <- read.delim("/path/20250115_coloc_vanderharstCAD_sQTLnotx_results.txt", as.is = T, stringsAsFactors = F)
+sumnotx <- read.delim("/path/20250115_coloc_vanderharstCAD_sQTLnotx_summary.txt", as.is = T, stringsAsFactors = F)
 # summarize
 sig_events <- row.names(sumnotx)[sumnotx$PP.H4.abf > 0.8]
 signotx <- resnotx[resnotx$gene %in% sig_events,]
@@ -143,8 +142,8 @@ coloc_all %>%
   rbind(., cad_both[,names(cad_both)[names(cad_both) %in% names(coloc_all)]])  -> coloc_all
 
 ### add FDR and beta for the sQTLs
-ntqtls <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/notx/splicing_QTLs_notx_rna_cis100kbCis_genelevelfdr0.05sig.txt", as.is = T, stringsAsFactors = F)
-il1bqtls <- read.delim("/data3/leafcutter/hg38_splicing_QTLs/il1b/splicing_QTLs_il1b_rna_cis100kbCis_genelevelfdr0.05sig.txt", as.is = T, stringsAsFactors = F)
+ntqtls <- read.delim("/path/notx/splicing_QTLs_notx_rna_cis100kbCis_genelevelfdr0.05sig.txt", as.is = T, stringsAsFactors = F)
+il1bqtls <- read.delim("/path/il1b/splicing_QTLs_il1b_rna_cis100kbCis_genelevelfdr0.05sig.txt", as.is = T, stringsAsFactors = F)
 
 ntqtls %>% mutate(snpid = unlist(lapply(strsplit(snps, ":"), "[[", 1)),
                   qtl = paste(snpid, gene, sep = '_')) -> ntqtls
@@ -161,6 +160,6 @@ coloc_all %>%
 
 
 # save
-write.table(coloc_all, "/data3/leafcutter/hg38_splicing_QTLs/coloc/20250722_coloc_ALLtraits_summaryofsigresults.txt", sep = "\t", quote = F, row.names = F)
+write.table(coloc_all, "/path/coloc/20250722_coloc_ALLtraits_summaryofsigresults.txt", sep = "\t", quote = F, row.names = F)
 
 
