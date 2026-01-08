@@ -2,7 +2,7 @@
 library(rtracklayer)
 
 # load GTF file used for leafcutter analysis (this is huge, clear quickly after taking what is needed out)
-hg38 <- readGFF("/Volumes/data3/leafcutter/anno_files/hg38_anno/gencode.v26.annotation.gtf")
+hg38 <- readGFF("/path/hg38_anno/gencode.v26.annotation.gtf")
 names(hg38)
 
 firstExons <- hg38[hg38$exon_number == "1" & !is.na(hg38$exon_number) & hg38$type == 'exon',]
@@ -16,7 +16,7 @@ table(firstExons$transcript_type)
 
 ##### now match up the first exons to the introns
 # read splices
-leaf.all <- read.delim("/Volumes/data3/anna/splicing_analysis_2024/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
+leaf.all <- read.delim("/path/20240321_annotatedFINAL_leafcutter_results_53HAECsIL1Bornotx_final_set_w_depth_pvalueSig.txt", as.is = T, stringsAsFactors = F)
 
 # restrict to only results with a 5% deltapsi and with known strand--otherwise the bedfile won't work for granges
 leaf <- leaf.all[leaf.all$p.adjust < 0.05 & abs(leaf.all$deltapsi) > 0.05 & !is.na(leaf.all$strand),]
@@ -127,7 +127,7 @@ AF.notx.peak <- data.frame(
   start = ifelse(AF.notx$strand == "+", AF.notx$FE_start - 200, AF.notx$FE_end), # 200 bp UPstream of the 5'UTR for +, the 5' end of the 5' UTR for -
   end = ifelse(AF.notx$strand == "+", AF.notx$FE_start, AF.notx$FE_end + 200), # the opposite
   strand = AF.notx$strand)
-#write.table(AF.notx.peak, "/Volumes/data3/anna/splicing_analysis_2024/20240523_200bp_promoter_AFnotx.txt", sep = "\t", row.names = F, quote = F)
+#write.table(AF.notx.peak, "/path/20240523_200bp_promoter_AFnotx.txt", sep = "\t", row.names = F, quote = F)
 
 AF.il1b <- AF[AF$deltapsi < 0,]
 AF.il1b.peak <- data.frame(
@@ -136,7 +136,7 @@ AF.il1b.peak <- data.frame(
   start = ifelse(AF.il1b$strand == "+", AF.il1b$FE_start - 200, AF.il1b$FE_end), # 200 bp UPstream of the 5'UTR for +, the 5' end of the 5' UTR for -
   end = ifelse(AF.il1b$strand == "+", AF.il1b$FE_start, AF.il1b$FE_end + 200), # the opposite
   strand = AF.il1b$strand)
-#write.table(AF.il1b.peak, "/Volumes/data3/anna/splicing_analysis_2024/20240523_200bp_promoter_AFil1b.txt", sep = "\t", row.names = F, quote = F)
+#write.table(AF.il1b.peak, "/path/20240523_200bp_promoter_AFil1b.txt", sep = "\t", row.names = F, quote = F)
 
 
 
@@ -152,7 +152,7 @@ other.peak <- data.frame(
 # remove duplicates
 other.peak.nodups <- other.peak[!duplicated(other.peak),]
 
-#write.table(other.peak.nodups, "/Volumes/data3/anna/splicing_analysis_2024/20240523_200bp_promoter_nonAFsplices.txt", sep = "\t", row.names = F, quote = F)
+#write.table(other.peak.nodups, "/path/20240523_200bp_promoter_nonAFsplices.txt", sep = "\t", row.names = F, quote = F)
 
 
 ####### making larger promoter regions
@@ -169,7 +169,7 @@ AF.notx.peak <- data.frame(
   start = ifelse(AF.notx$strand == "+", AF.notx$FE_start - 1000, AF.notx$FE_end - 500), 
   end = ifelse(AF.notx$strand == "+", AF.notx$FE_start + 500, AF.notx$FE_end + 1000),
   strand = AF.notx$strand)
-write.table(AF.notx.peak, "/Volumes/data3/anna/splicing_analysis_2024/20241203_1500bp_promoter_AFnotx.txt", sep = "\t", row.names = F, quote = F)
+write.table(AF.notx.peak, "/path/20241203_1500bp_promoter_AFnotx.txt", sep = "\t", row.names = F, quote = F)
 
 AF.notx.peak$start - AF.notx.peak$end
 
@@ -180,6 +180,6 @@ AF.il1b.peak <- data.frame(
   start = ifelse(AF.il1b$strand == "+", AF.il1b$FE_start - 1000, AF.il1b$FE_end - 500), # 200 bp UPstream of the 5'UTR for +, the 5' end of the 5' UTR for -
   end = ifelse(AF.il1b$strand == "+", AF.il1b$FE_start + 500, AF.il1b$FE_end + 1000), # the opposite
   strand = AF.il1b$strand)
-write.table(AF.il1b.peak, "/Volumes/data3/anna/splicing_analysis_2024/20241203_1500bp_promoter_AFil1b.txt", sep = "\t", row.names = F, quote = F)
+write.table(AF.il1b.peak, "/path/20241203_1500bp_promoter_AFil1b.txt", sep = "\t", row.names = F, quote = F)
 
 AF.il1b.peak$start - AF.il1b.peak$end
