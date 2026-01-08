@@ -5,16 +5,16 @@ library(tidyverse)
 library(ggplot2)
 set.seed(12678)
 
-setwd("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/")
+setwd("/path/")
 
-sqtl_nt_sumstat <- read.table("/Volumes/data3/leafcutter/hg38_splicing_QTLs/notx/splicing_QTLs_notx_rna_cis1000bpCis_with_gene_level_FDR.txt", sep = "\t", as.is = T, stringsAsFactors = F, header = T)
+sqtl_nt_sumstat <- read.table("/path/notx/splicing_QTLs_notx_rna_cis1000bpCis_with_gene_level_FDR.txt", sep = "\t", as.is = T, stringsAsFactors = F, header = T)
 head(sqtl_nt_sumstat)
-sqtl_il1b_sumstat <- read.table("/Volumes/data3/leafcutter/hg38_splicing_QTLs/il1b/splicing_QTLs_il1b_rna_cis1000bpCis_with_gene_level_FDR.txt", sep = "\t", as.is = T, stringsAsFactors = F, header = T)
+sqtl_il1b_sumstat <- read.table("/path/il1b/splicing_QTLs_il1b_rna_cis1000bpCis_with_gene_level_FDR.txt", sep = "\t", as.is = T, stringsAsFactors = F, header = T)
 head(sqtl_nt_sumstat)
 
 ################ RELA ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_p65 <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_nt_p65_enrichvsrandom1000perm.txt")
+results_p65 <- read.delim("/path/20251002_sQTL_nt_p65_enrichvsrandom1000perm.txt")
 
 results_p65 %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
@@ -48,7 +48,7 @@ write.table(stats_p65, "20251002_sQTL_nt_p65_enrichvsrandom1000perm_hypergeometr
 
 ################ ERG notx ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_ergnt <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_nt_erg.notx_enrichvsrandom1000perm.txt")
+results_ergnt <- read.delim("/path/20251002_sQTL_nt_erg.notx_enrichvsrandom1000perm.txt")
 
 results_ergnt %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
@@ -81,7 +81,7 @@ results_ergnt %>% group_by(bin) %>%
 write.table(stats_ergnt, "20251002_sQTL_nt_erg.notx_enrichvsrandom1000perm_hypergeometricTest.txt")
 ################ ERG notx ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_ergil1b <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_il1b_erg.il1b_enrichvsrandom1000perm.txt")
+results_ergil1b <- read.delim("/path/20251002_sQTL_il1b_erg.il1b_enrichvsrandom1000perm.txt")
 
 results_ergil1b %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
@@ -114,7 +114,7 @@ results_ergil1b %>% group_by(bin) %>%
 write.table(stats_ergil1b, "20251002_sQTL_nt_erg.il1b_enrichvsrandom1000perm_hypergeometricTest.txt")
 ################ ATAC notx ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_atacnt <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_nt_atac.notx_enrichvsrandom1000perm.txt")
+results_atacnt <- read.delim("/path/20251002_sQTL_nt_atac.notx_enrichvsrandom1000perm.txt")
 
 results_atacnt %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
@@ -148,7 +148,7 @@ write.table(stats_atacnt, "20251002_sQTL_nt_atac.notx_enrichvsrandom1000perm_hyp
 
 ################ ATAC IL1B ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_atacil1b <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_il1b_atac.il1b_enrichvsrandom1000perm.txt")
+results_atacil1b <- read.delim("/path/20251002_sQTL_il1b_atac.il1b_enrichvsrandom1000perm.txt")
 
 results_atacil1b %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
@@ -183,7 +183,7 @@ write.table(stats_atacil1b, "20251002_sQTL_nt_atac.il1b_enrichvsrandom1000perm_h
 
 ################ h3k27ac notx ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_h3k27acnt <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_nt_h3k27ac.notx_enrichvsrandom1000perm.txt")
+results_h3k27acnt <- read.delim("/path/20251002_sQTL_nt_h3k27ac.notx_enrichvsrandom1000perm.txt")
 
 results_h3k27acnt %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
@@ -217,7 +217,7 @@ write.table(stats_h3k27acnt, "20251002_sQTL_nt_h3k27ac.notx_enrichvsrandom1000pe
 
 ################ h3k27ac IL1B ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_h3k27acil1b <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_il1b_h3k27ac.il1b_enrichvsrandom1000perm.txt")
+results_h3k27acil1b <- read.delim("/path/20251002_sQTL_il1b_h3k27ac.il1b_enrichvsrandom1000perm.txt")
 
 results_h3k27acil1b %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
@@ -252,7 +252,7 @@ write.table(stats_h3k27acil1b, "20251002_sQTL_nt_h3k27ac.il1b_enrichvsrandom1000
 
 ################ rna notx ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_rnant <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_nt_rna.notx.eqtl_enrichvsrandom1000perm.txt")
+results_rnant <- read.delim("/path/20251002_sQTL_nt_rna.notx.eqtl_enrichvsrandom1000perm.txt")
 
 results_rnant %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
@@ -287,7 +287,7 @@ write.table(stats_rnant, "20251002_sQTL_nt_rna.notx_enrichvsrandom1000perm_hyper
 
 ################ rna IL1B ##################
 ## read in results and plotted on local to get them perfectly shaped
-results_rnail1b <- read.delim("/Volumes/data3/leafcutter/hg38_splicing_QTLs/eQTL_molQTL_enrichmentTests/20251002_sQTL_il1b_rna.il1b.eqtl_enrichvsrandom1000perm.txt")
+results_rnail1b <- read.delim("/path/20251002_sQTL_il1b_rna.il1b.eqtl_enrichvsrandom1000perm.txt")
 
 results_rnail1b %>%
   mutate(xlab = paste0("1e-", as.character(bin)),
