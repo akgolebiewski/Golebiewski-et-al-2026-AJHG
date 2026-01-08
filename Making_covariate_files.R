@@ -1,6 +1,6 @@
-covar_nt<-read.delim("X:/leafcutter/hg38_splicing_QTLs/notx/NT_perind.counts.gz.PCs",
+covar_nt<-read.delim("/path/notx/NT_perind.counts.gz.PCs",
                   sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-covar2_nt<-read.delim("X:/leafcutter/hg38_bamfiles/final_set/bamfiles_and_confounders_final_set.txt",
+covar2_nt<-read.delim("/path/bamfiles_and_confounders_final_set.txt",
                       sep = "\t", header = F, as.is = T, stringsAsFactors = F)
 
 notx_cov_file<-as.data.frame(matrix(nrow = 18, ncol = 53))
@@ -19,13 +19,13 @@ for(i in 1:ncol(notx_cov_file)){
 
 row.names(notx_cov_file)<-paste0("factor_",row.names(notx_cov_file))
 
-write.table(notx_cov_file, "X:/leafcutter/hg38_splicing_QTLs/notx/covariates_notx_for_qtl_analysis.txt",
+write.table(notx_cov_file, "/path/notx/covariates_notx_for_qtl_analysis.txt",
             sep = "\t", col.names = NA, row.names = T, quote = F)
 
 #il1b
-covar_il1b<-read.delim("X:/leafcutter/hg38_splicing_QTLs/il1b/IL1B_perind.counts.gz.PCs",
+covar_il1b<-read.delim("/path/il1b/IL1B_perind.counts.gz.PCs",
                      sep = "\t", header = T, as.is = T, stringsAsFactors = F)
-covar2_il1b<-read.delim("X:/leafcutter/hg38_bamfiles/final_set/bamfiles_and_confounders_final_set.txt",
+covar2_il1b<-read.delim("/path/bamfiles_and_confounders_final_set.txt",
                       sep = "\t", header = F, as.is = T, stringsAsFactors = F)
 
 il1b_cov_file<-as.data.frame(matrix(nrow = 18, ncol = 53))
@@ -44,5 +44,6 @@ for(i in 1:ncol(il1b_cov_file)){
 
 row.names(il1b_cov_file)<-paste0("factor_",row.names(il1b_cov_file))
 
-write.table(il1b_cov_file, "X:/leafcutter/hg38_splicing_QTLs/il1b/covariates_il1b_for_qtl_analysis.txt",
+write.table(il1b_cov_file, "/path/il1b/covariates_il1b_for_qtl_analysis.txt",
             sep = "\t", col.names = NA, row.names = T, quote = F)
+
