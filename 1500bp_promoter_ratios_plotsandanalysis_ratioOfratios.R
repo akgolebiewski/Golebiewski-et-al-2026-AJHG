@@ -1,4 +1,4 @@
-setwd("/Volumes/data3/anna/splicing_analysis_2024/promoterBindingRatios/")
+setwd("/path/promoterBindingRatios/")
 set.seed(12568)
 library(ggplot2)
 library(ggrepel)
@@ -380,7 +380,7 @@ for (x in genes) {
 
 notx_ratio$pvalue <- as.numeric(t(unlist(t_ERG)))[match(notx_ratio$gene, names(t_ERG))]
 
-write.table(notx_ratio, "/Volumes/data3/anna/splicing_ms_2025/final_data/ERG_ratio_alt_promoters_byDonor_notxOnly.txt", sep = "\t", quote = F)
+write.table(notx_ratio, "/path/ERG_ratio_alt_promoters_byDonor_notxOnly.txt", sep = "\t", quote = F)
 
 
 
@@ -596,42 +596,42 @@ erg_rep <- ERGdown[!ERGdown %in% p65_erg_rep]
 p65_rep <- p65down[!p65down %in% p65_erg_rep]
 
 ##### save results of tests
-write.table(pairs_ATAC, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/ATAC_ratio_alt_promoters_byDonor.txt", row.names = F, quote = F, sep = "\t")
-write.table(pairs_h3, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/H3K27ac_ratio_alt_promoters_byDonor.txt", row.names = F, quote = F, sep = "\t")
-write.table(pairs_ERG, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/ERG_ratio_alt_promoters_byDonor.txt", row.names = F, quote = F, sep = "\t")
-write.table(il1b_ratio_p65, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/p65_ratio_alt_promoters_byDonor.txt", row.names = F, quote = F, sep = "\t")
+write.table(pairs_ATAC, file = "/path/ATAC_ratio_alt_promoters_byDonor.txt", row.names = F, quote = F, sep = "\t")
+write.table(pairs_h3, file = "/path/H3K27ac_ratio_alt_promoters_byDonor.txt", row.names = F, quote = F, sep = "\t")
+write.table(pairs_ERG, file = "/path/ERG_ratio_alt_promoters_byDonor.txt", row.names = F, quote = F, sep = "\t")
+write.table(il1b_ratio_p65, file = "/path/p65_ratio_alt_promoters_byDonor.txt", row.names = F, quote = F, sep = "\t")
 
 ##### save results of ratios
-write.table(ror_ATAC, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/ATAC_ratio_alt_promoters.txt", row.names = F, quote = F, sep = "\t")
-write.table(ror_H3K27ac, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/H3K27ac_ratio_alt_promoters.txt", row.names = F, quote = F, sep = "\t")
-write.table(ror_ERG, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/ERG_ratio_alt_promoters.txt", row.names = F, quote = F, sep = "\t")
-write.table(df_ERG, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/ERG_ratio_alt_promoters_sepByTreatment.txt", row.names = F, quote = F, sep = "\t")
-write.table(df_p65, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/p65_ratio_alt_promoters.txt", row.names = F, quote = F, sep = "\t")
+write.table(ror_ATAC, file = "/path/ATAC_ratio_alt_promoters.txt", row.names = F, quote = F, sep = "\t")
+write.table(ror_H3K27ac, file = "/path/H3K27ac_ratio_alt_promoters.txt", row.names = F, quote = F, sep = "\t")
+write.table(ror_ERG, file = "/path/ERG_ratio_alt_promoters.txt", row.names = F, quote = F, sep = "\t")
+write.table(df_ERG, file = "/path/ERG_ratio_alt_promoters_sepByTreatment.txt", row.names = F, quote = F, sep = "\t")
+write.table(df_p65, file = "/path/p65_ratio_alt_promoters.txt", row.names = F, quote = F, sep = "\t")
 
-#ror_ATAC <- read.delim("/Volumes/data3/anna/splicing_ms_2025/final_data/ATAC_ratio_alt_promoters.txt", as.is = T, stringsAsFactors = F)
-#ror_H3K27ac <- read.delim("/Volumes/data3/anna/splicing_ms_2025/final_data/H3K27ac_ratio_alt_promoters.txt", as.is = T, stringsAsFactors = F)
-#ror_ERG <- read.delim("/Volumes/data3/anna/splicing_ms_2025/final_data/ERG_ratio_alt_promoters.txt", as.is = T, stringsAsFactors = F)
-#df_p65<- read.delim("/Volumes/data3/anna/splicing_ms_2025/final_data/p65_ratio_alt_promoters.txt", as.is = T, stringsAsFactors = F)
+#ror_ATAC <- read.delim("/path/ATAC_ratio_alt_promoters.txt", as.is = T, stringsAsFactors = F)
+#ror_H3K27ac <- read.delim("/path/H3K27ac_ratio_alt_promoters.txt", as.is = T, stringsAsFactors = F)
+#ror_ERG <- read.delim("/path/ERG_ratio_alt_promoters.txt", as.is = T, stringsAsFactors = F)
+#df_p65<- read.delim("/path/p65_ratio_alt_promoters.txt", as.is = T, stringsAsFactors = F)
 
-pairs_ATAC <- read.delim( file = "/Volumes/data3/anna/splicing_ms_2025/final_data/ATAC_ratio_alt_promoters_byDonor.txt")
-pairs_h3 <- read.delim(file = "/Volumes/data3/anna/splicing_ms_2025/final_data/H3K27ac_ratio_alt_promoters_byDonor.txt")
-pairs_ERG <- read.delim( file = "/Volumes/data3/anna/splicing_ms_2025/final_data/ERG_ratio_alt_promoters_byDonor.txt")
-il1b_ratio_p65 <- read.delim( file = "/Volumes/data3/anna/splicing_ms_2025/final_data/p65_ratio_alt_promoters_byDonor.txt")
+pairs_ATAC <- read.delim( file = "/path/ATAC_ratio_alt_promoters_byDonor.txt")
+pairs_h3 <- read.delim(file = "/path/H3K27ac_ratio_alt_promoters_byDonor.txt")
+pairs_ERG <- read.delim( file = "/path/ERG_ratio_alt_promoters_byDonor.txt")
+il1b_ratio_p65 <- read.delim( file = "/path/p65_ratio_alt_promoters_byDonor.txt")
 
 ###### making lists of these genes to pull from our promoter lists for motif analysis
-write.table(p65_erg_act, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/p65_and_erg_activating_alt_prom.txt", row.names = F, quote = F)
-write.table(p65_erg_rep, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/p65_and_erg_repressing_alt_prom.txt", row.names = F, quote = F)
-write.table(p65_only, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/p65_only_activating_alt_prom.txt", row.names = F, quote = F)
-write.table(p65_rep, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/p65_only_repressing_alt_prom.txt", row.names = F, quote = F)
-write.table(erg_only, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/erg_only_activating_alt_prom.txt", row.names = F, quote = F)
-write.table(erg_rep, file = "/Volumes/data3/anna/splicing_ms_2025/final_data/erg_only_repressing_alt_prom.txt", row.names = F, quote = F)
+write.table(p65_erg_act, file = "/path/p65_and_erg_activating_alt_prom.txt", row.names = F, quote = F)
+write.table(p65_erg_rep, file = "/path/p65_and_erg_repressing_alt_prom.txt", row.names = F, quote = F)
+write.table(p65_only, file = "/path/p65_only_activating_alt_prom.txt", row.names = F, quote = F)
+write.table(p65_rep, file = "/path/p65_only_repressing_alt_prom.txt", row.names = F, quote = F)
+write.table(erg_only, file = "/path/erg_only_activating_alt_prom.txt", row.names = F, quote = F)
+write.table(erg_rep, file = "/path/erg_only_repressing_alt_prom.txt", row.names = F, quote = F)
 
-p65_erg_act <- readLines("/Volumes/data3/anna/splicing_ms_2025/final_data/p65_and_erg_activating_alt_prom.txt")
-p65_erg_rep <- readLines("/Volumes/data3/anna/splicing_ms_2025/final_data/p65_and_erg_repressing_alt_prom.txt")
-p65_only <- readLines("/Volumes/data3/anna/splicing_ms_2025/final_data/p65_only_activating_alt_prom.txt")
-p65_rep <- readLines("/Volumes/data3/anna/splicing_ms_2025/final_data/p65_only_repressing_alt_prom.txt")
-erg_only <- readLines("/Volumes/data3/anna/splicing_ms_2025/final_data/erg_only_activating_alt_prom.txt")
-erg_rep <- readLines("/Volumes/data3/anna/splicing_ms_2025/final_data/erg_only_repressing_alt_prom.txt")
+p65_erg_act <- readLines("/path/p65_and_erg_activating_alt_prom.txt")
+p65_erg_rep <- readLines("/path/p65_and_erg_repressing_alt_prom.txt")
+p65_only <- readLines("/path/p65_only_activating_alt_prom.txt")
+p65_rep <- readLines("/path/p65_only_repressing_alt_prom.txt")
+erg_only <- readLines("/path/erg_only_activating_alt_prom.txt")
+erg_rep <- readLines("/path/erg_only_repressing_alt_prom.txt")
 
 ##### make one DF with all of these
 df_ERG$mark = "ERG"
